@@ -3,6 +3,10 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Board;
+use App\Models\CustomField;
+use App\Models\Label;
+use App\Models\Listing;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,11 +16,24 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        Label::factory(5)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        Board::factory(5)->create();
+
+        Board::all()->each(function ($board) {
+            $board->listings()->saveMany(Listing::factory(rand(0,15))->make());
+        });
+
+        //Listing::factory(30)->create();
+
+        Listing::all()->each(function (Listing $listing) {
+            $listing->labels()->attach(
+                Label::inRandomOrder()->limit(rand(1, 5))->get()
+            );
+
+            $listing->customFields()->saveMany(
+                CustomField::factory(rand(1, 5))->make()
+            );
+        });
     }
 }

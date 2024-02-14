@@ -19,7 +19,7 @@ jobs:
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Setup node
-      run: npm install --no-save && npm run dev && rm -rf node_modules
+      run: npm install --no-save && npm run build && rm -rf node_modules
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - name: Generate key

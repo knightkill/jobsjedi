@@ -3,18 +3,20 @@
 namespace App\Libraries\Services;
 
 use App\Libraries\BoardsContract;
-use App\Models\Board;
-use App\Models\Listing;
+use App\Models\Monitor;
+use App\Traits\GenericBoardTrait;
 use Carbon\Carbon;
 use Goutte\Client;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class LaraJobs implements BoardsContract
 {
+
+    use GenericBoardTrait;
+
     public function __construct(
-        public Board $board
+        public Monitor $monitor
     )
     {
     }
@@ -24,7 +26,8 @@ class LaraJobs implements BoardsContract
         $result = collect();
 
         $client = new Client();
-        $crawler = $client->request('GET', 'https://larajobs.com');
+        $url = $this->makeURL();
+        $crawler = $client->request('GET', $url);
         $a_sections = $crawler
             ->filter('a.job-link.group');
         foreach($a_sections as $index => $a_section) {
@@ -75,11 +78,6 @@ class LaraJobs implements BoardsContract
         return $result;
     }
 
-    public function filter(Collection $listing): bool
-    {
-        return true;
-    }
-
     public function fromTimeAgo($period_passed): ?string {
         try {
             $from = ['mo','mos','s', 'm', 'h', 'd', 'w','y'];
@@ -100,11 +98,12 @@ class LaraJobs implements BoardsContract
         }
     }
 
-    function str_replace_first($search, $replace, $subject) {
-        $pos = strpos($subject, $search);
-        if ($pos !== false) {
-            return substr_replace($subject, $replace, $pos, strlen($search));
+    private function makeURL(): string
+    {
+        $base_url = "https://larajobs.com";
+        if($this->settings()->where('key','filter_tech')->isNotEmpty()) {
+            return "$base_url/{$this->settings()->where('key','filter_tech')->first()->value}-jobs";
         }
-        return $subject;
+        return $base_url;
     }
 }

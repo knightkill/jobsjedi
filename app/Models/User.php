@@ -62,8 +62,17 @@ class User extends Authenticatable implements MustVerifyEmail
         'profile_photo_url',
     ];
 
+    /**
+     * Get all the listings for the user.
+     * @return HasMany
+     */
     public function listings(): HasMany
     {
         return $this->hasMany(Listing::class);
+    }
+
+    public function monitors(): HasMany
+    {
+        return $this->hasMany(Monitor::class);
     }
 }

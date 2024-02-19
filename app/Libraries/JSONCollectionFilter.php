@@ -72,7 +72,7 @@ class JSONCollectionFilter
     {
         foreach ($haystack as $index=>$item) {
             if ($index === $key) {
-                if (Str::contains($item, $needle)) {
+                if (Str::contains($item, Str::lower($needle), true)) {
                     return true;
                 }
             }

@@ -10,5 +10,5 @@ interface BoardsContract
 
     function retrieveListings(): Collection;
 
-    public function filter(Collection $listing): bool;
+    public function filter(Collection $listings): Collection;
 }

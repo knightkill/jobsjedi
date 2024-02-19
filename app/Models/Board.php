@@ -18,8 +18,13 @@ class Board extends Model
         return $query->where('active', true);
     }
 
-    public function listings(): HasMany
+    public function monitors(): HasMany
     {
-        return $this->hasMany(Listing::class);
+        return $this->hasMany(Monitor::class);
+    }
+
+    public function boardSettings(): HasMany
+    {
+        return $this->hasMany(BoardSetting::class);
     }
 }

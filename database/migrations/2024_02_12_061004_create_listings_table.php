@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('listings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('board_id')->constrained();
+            $table->foreignIdFor(\App\Models\Monitor::class)->constrained();
+
             $table->string('service_id');
             $table->string('company')->nullable();
             $table->string('title')->nullable();

@@ -3,11 +3,11 @@
 namespace App\Libraries;
 
 use App\Models\Board;
+use App\Models\Monitor;
 use App\Models\Listing;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
-class Jedi
+class JediCore
 {
 
     public function __construct(
@@ -17,32 +17,34 @@ class Jedi
     public function processOpportunities(): void
     {
         $boards = Board::active()->get();
-        $boards->each(function ($board) {
+        $boards->each(function (Board $board) {
             $className = 'App\Libraries\Services\\' . ucfirst($board->slug);
-            $instance = new $className($board);
-            if (!$instance instanceof BoardsContract) {
-                rd("Class $className doesn't implement BoardsContract interface and can't be used!");
-            }
-            $listings = $instance->retrieveListings();
-            $this->handleListings($listings, $instance, $board);
+            $board
+                ->monitors()
+                ->get()
+                ->each(function ($monitor) use ($className) {
+                    $instance = new $className($monitor);
+                    if (!$instance instanceof BoardsContract) {
+                        rd("Class $className doesn't implement BoardsContract interface and can't be used!");
+                    }
+                    $listings = $instance->retrieveListings();
+                    $this->handleListings($listings, $instance, $monitor);
+                });
         });
     }
 
     private function handleListings(
         \Illuminate\Support\Collection $listings,
         \App\Libraries\BoardsContract $instance,
-        Board $board
+        Monitor $monitor
     ): void
     {
-        //$listings = $board->listings()->makeMany($listings);
-        $listings = $listings->filter(function ($listing) use ($instance) {
-            return $instance->filter($listing);
-        });
-        $listings->map(function($listing) use ($board) {
+        $listings = $instance->filter($listings);
+        $listings->map(function($listing) use ($monitor) {
 
             $listingModel = Listing::firstOrCreate(
                 [
-                    'board_id' => $board->id,
+                    'monitor_id' => $monitor->id,
                     'service_id' => $listing->get('id')
                 ],
                 $listing->get('fields')
@@ -75,6 +77,7 @@ class Jedi
                         ]
                     );
             });
+
             return $listingModel->refresh();
         });
     }

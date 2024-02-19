@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Libraries\Jedi;
+use App\Libraries\JediCore;
 use App\Libraries\Services\LaraJobs;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,6 +31,6 @@ class ListingUpdaterJob implements ShouldQueue
      */
     public function handle()
     {
-        (new Jedi())->processOpportunities();
+        (new JediCore())->processOpportunities();
     }
 }

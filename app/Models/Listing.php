@@ -29,9 +29,9 @@ class Listing extends Model
         return $this->belongsToMany(Label::class);
     }
 
-    public function board(): BelongsTo
+    public function monitor(): BelongsTo
     {
-        return $this->belongsTo(Board::class);
+        return $this->belongsTo(Monitor::class);
     }
 
     public function user(): BelongsTo

@@ -3,31 +3,34 @@
 namespace App\Libraries\Services;
 
 use App\Libraries\BoardsContract;
-use App\Models\Board;
+use App\Models\Monitor;
+use App\Traits\GenericBoardTrait;
 use Goutte\Client;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\URL;
 use Symfony\Component\DomCrawler\Crawler;
 
 class LinkedIn implements BoardsContract
 {
-    private string $url;
+
+    use GenericBoardTrait;
+
+    private string $url = 'https://www.linkedin.com/jobs/search';
 
     public function __construct(
-        public Board $board
+        public Monitor $monitor
     )
-    {
-        $this->url = 'https://www.linkedin.com/jobs/search/?currentJobId=3462810155&distance=25&geoId=92000000&keywords=remote%20laravel&position=7&pageNum=';
-
-    }
+    {}
 
     function retrieveListings(): Collection
     {
         $result = collect();
 
         for ($i = 1; $i < 20; $i++) {
+            $url = $this->makeURL($i);
             $client = new Client();
-            $crawler = $client->request('GET', $this->url.$i);
+            $crawler = $client->request('GET', url($this->url,http_build_query(['pageNum' => $i ?? 1])));
             $a_sections = $crawler
                 ->filter('ul.jobs-search__results-list');
             $a_sections = $a_sections
@@ -67,8 +70,21 @@ class LinkedIn implements BoardsContract
         return $result;
     }
 
-    public function filter(Collection $listing): bool
+    private function makeURL($pageNum): string
     {
-        return true;
+        $query_array = [];
+        //Add location as query parameter if exists
+        if($this->settings()->where('key','location')->isNotEmpty()) {
+            $query_array['location'] = $this->settings()->where('key','location')->first()->value;
+        }
+        if($this->settings()->where('key','keywords')->isNotEmpty()) {
+            $query_array['keywords'] = $this->settings()->where('key','keywords')->first()->value;
+        }
+
+        if($pageNum) {
+            $query_array['pageNum'] = $pageNum;
+        }
+
+        return URL::to($this->url . '?' . http_build_query($query_array),true);
     }
 }

@@ -53,7 +53,7 @@ class JediCore
 
             collect($listing?->get('labels'))->map(function($label) use ($listingModel, $listing) {
                 $labelArray = Validator::make($label, [
-                    'name' => 'required|string|unique:labels,name|min:3|max:30',
+                    'name' => 'required|string|min:3|max:30',
                     'description' => 'string',
                 ])->valid();
                 if(!empty($labelArray) && !empty($labelArray['name'])){

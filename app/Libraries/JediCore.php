@@ -74,7 +74,8 @@ class JediCore
                             'name' => $key,
                         ],
                         [
-                            'value' => $customField,
+                            // If array or object, convert to json
+                            'value' => is_array($customField) || is_object($customField) ? json_encode($customField) : $customField,
                         ]
                     );
             });

@@ -21,6 +21,7 @@ class JediCore
             $className = 'App\Libraries\Services\\' . ucfirst($board->slug);
             $board
                 ->monitors()
+                ->active()
                 ->get()
                 ->each(function ($monitor) use ($className) {
                     $instance = new $className($monitor);

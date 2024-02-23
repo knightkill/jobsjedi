@@ -44,4 +44,9 @@ class Monitor extends Model
     {
         return $this->hasMany(MonitorSetting::class);
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('active', true);
+    }
 }

@@ -140,6 +140,24 @@ class SyncJediData extends Command
                             'active' => true,
                             'filter' => [],
                             'settings' => []
+                        ],
+                        [
+                            'name' => 'Hardip\'s LinkedIn',
+                            'board_slug' => 'linkedIn',
+                            'slug' => 'hardip-linkedIn',
+                            'description' => 'LinkedIn monitor for Hardip',
+                            'active' => true,
+                            'filter' => [],
+                            'settings' => [
+                                [
+                                    'key' => 'location',
+                                    'value' => 'India',
+                                ],
+                                [
+                                    'key' => 'keywords',
+                                    'value' => 'laravel remote'
+                                ]
+                            ]
                         ]
                     ]
                 ]

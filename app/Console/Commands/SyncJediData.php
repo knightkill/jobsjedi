@@ -51,7 +51,18 @@ class SyncJediData extends Command
                     'slug' => 'linkedIn',
                     'description' => '',
                     'active' => true,
-                    'board_settings' => []
+                    'board_settings' => [
+                        [
+                            'key' => 'location',
+                            'description' => 'Location',
+                            'required' => false,
+                        ],
+                        [
+                            'key' => 'keywords',
+                            'description' => 'Keywords',
+                            'required' => false,
+                        ],
+                    ]
                 ],
                 [
                     'name' => 'JustRemote',
@@ -108,28 +119,8 @@ class SyncJediData extends Command
                             'slug' => 'hardip-larajobs',
                             'description' => 'LaraJobs monitor for Hardip',
                             'active' => true,
-                            'filter' => [
-                                [
-                                    'operator' => 'or',
-                                    'value' => [
-                                        [
-                                            "field" => "title",
-                                            "operator" => "like",
-                                            "value" => "backend"
-                                        ],
-                                        [
-                                            "field" => "description",
-                                            "operator" => "like",
-                                            "value" => "backend"
-                                        ]
-                                    ]
-                                ]
-                            ],
+                            'filter' => [],
                             'settings' => [
-                                [
-                                    'key' => 'filter_tech',
-                                    'value' => 'laravel',
-                                ],
                             ]
                         ],
                         [
@@ -142,12 +133,42 @@ class SyncJediData extends Command
                             'settings' => []
                         ],
                         [
-                            'name' => 'Hardip\'s LinkedIn',
+                            'name' => 'Linkedin Singapore',
                             'board_slug' => 'linkedIn',
-                            'slug' => 'hardip-linkedIn',
-                            'description' => 'LinkedIn monitor for Hardip',
+                            'slug' => 'linkedIn-singapore',
+                            'description' => 'Monitor linkedin for Singapore location',
                             'active' => true,
-                            'filter' => [],
+                            'filter' => [
+                                [
+                                    "field" => "*",
+                                    "operator" => "like",
+                                    "value" => "laravel"
+                                ]
+                            ],
+                            'settings' => [
+                                [
+                                    'key' => 'location',
+                                    'value' => 'Singapore',
+                                ],
+                                [
+                                    'key' => 'keywords',
+                                    'value' => 'laravel'
+                                ]
+                            ]
+                        ],
+                        [
+                            'name' => 'Linkedin APAC',
+                            'board_slug' => 'linkedIn',
+                            'slug' => 'linkedIn-apac',
+                            'description' => 'Monitor linkedin for APAC location',
+                            'active' => true,
+                            'filter' => [
+                                [
+                                    "field" => "*",
+                                    "operator" => "like",
+                                    "value" => "laravel"
+                                ]
+                            ],
                             'settings' => [
                                 [
                                     'key' => 'location',
@@ -155,7 +176,7 @@ class SyncJediData extends Command
                                 ],
                                 [
                                     'key' => 'keywords',
-                                    'value' => 'laravel remote'
+                                    'value' => 'laravel'
                                 ]
                             ]
                         ]

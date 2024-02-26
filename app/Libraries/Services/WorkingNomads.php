@@ -3,12 +3,15 @@
 namespace App\Libraries\Services;
 
 use App\Libraries\BoardsContract;
+use App\Traits\GenericBoardTrait;
 use GuzzleHttp\Client;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class WorkingNomads implements BoardsContract
 {
+
+    use GenericBoardTrait;
 
     private string $url;
     private Client $client;
@@ -59,11 +62,5 @@ class WorkingNomads implements BoardsContract
         }
 
         return $result;
-    }
-
-    public function filter(Collection $listing): bool
-    {
-        return true;
-        // TODO: Implement filter() method.
     }
 }
